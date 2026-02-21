@@ -224,14 +224,14 @@ class Formula:
                     result.set_variable_weight(
                         i + 1, float(weights[2 * i + 1]), float(weights[2 * i])
                     )
-            elif len(line) == 0 or line[0] == "c":
+            elif len(line) == 0 or (line[0] == "c" and not line.startswith("c p weight")):
                 continue
             elif line[0] == "p":
                 num_vars = int(line.split()[2])
-            elif line[0] == "w":  # Cachet weights
+            elif line[0] == "w" or line.startswith("c p weight"):  # Cachet weights
                 args = line.split()
-                var_id = int(args[1])
-                weight = float(args[2])
+                var_id = int(args[3])
+                weight = float(args[4])
                 if weight_format == WeightFormat.cachet:
                     if weight == -1:
                         result.set_variable_weight(var_id, 1, 1)
