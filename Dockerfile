@@ -1,7 +1,5 @@
-FROM python:3.7-slim
+FROM python:3.7-slim-bullseye
 
-ADD http://glaros.dtc.umn.edu/gkhome/fetch/sw/metis/metis-5.1.0.tar.gz /solvers/metis-5.1.0.tar.gz
-ENV METIS_DLL=/solvers/metis-5.1.0/build/Linux-x86_64/libmetis/libmetis.so
 
 RUN apt-get clean \
 && cd /var/lib/apt \
@@ -10,7 +8,7 @@ RUN apt-get clean \
 && apt-get update \
 && apt-get upgrade -y \
 && mkdir -p /usr/share/man/man1 \
-&& apt-get -y install g++ make libxml2-dev zlib1g-dev cmake openjdk-11-jdk libopenblas-dev \
+&& apt-get -y install g++ make metis libmetis-dev libxml2-dev zlib1g-dev cmake openjdk-11-jdk libopenblas-dev \
 && cd /solvers/ \
 && tar -xvf metis-5.1.0.tar.gz \
 && rm metis-5.1.0.tar.gz \

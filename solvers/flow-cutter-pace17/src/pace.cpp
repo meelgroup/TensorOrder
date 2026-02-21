@@ -150,7 +150,7 @@ void compute_multilevel_partition(const Tail&tail, const Head&head, const Comput
 	while(!open_cells.empty()){
 
 		#ifndef NDEBUG
-		
+
 		int real_max_closed_bag_size = 0;
 		for(auto&x:closed_cells)
 			max_to(real_max_closed_bag_size, x.bag_size());
@@ -173,7 +173,7 @@ void compute_multilevel_partition(const Tail&tail, const Head&head, const Comput
 		if(current_cell.bag_size() > max_closed_bag_size){
 
 			auto interior_node_list = std::move(current_cell.separator_node_list);
-			int interior_node_count = interior_node_list.size();			
+			int interior_node_count = interior_node_list.size();
 
 			ArrayIDFunc<int>sub_node_to_node(interior_node_count);
 
@@ -209,7 +209,7 @@ void compute_multilevel_partition(const Tail&tail, const Head&head, const Comput
 			for(auto&x:sub_head)
 				x = node_to_sub_node(x);
 			sub_head.set_image_count(interior_node_count);
-			
+
 			auto sub_separator = compute_separator(sub_tail, sub_head);
 
 			BitIDFunc is_in_sub_separator(interior_node_count);
@@ -244,7 +244,7 @@ void compute_multilevel_partition(const Tail&tail, const Head&head, const Comput
 						x = sub_node_to_node(x);
 
 					new_cell.parent_cell = closed_cell_id;
-					
+
 					new_cell.separator_node_list = std::move(new_cell_interior_node_list);
 
 					new_cell.boundary_node_list = current_cell.boundary_node_list;
