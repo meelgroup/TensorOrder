@@ -18,7 +18,7 @@ class NumpyAPI(BaseTensorAPI):
                 "float16": self._numpy.float16,
                 "uint": self._numpy.uint64,
                 "int": self._numpy.int64,
-                "bigint": self._numpy.object,
+                "bigint": object,
             }
 
             if value in types:

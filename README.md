@@ -46,7 +46,7 @@ sudo singularity build tensororder Singularity
 ### Using the container
 Once built, Singularity containers can be used as follows to run TensorOrder:
 ```
-./tensororder --method="line-Flow" < "benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf"
+./tensororder --planner="line-Flow" --weights="unweighted" < "benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf"
 ```
 
 
@@ -57,7 +57,7 @@ make -C src
 ```
 
 Moreover, the various tensor methods each require additional setup. Consult the [Docker file](Dockerfile) for an example set of installation commands.
-* For KCMR-metis and KCMR-gn, METIS must be installed using the instructions [here](src/tensorcsp).
+* For KCMR-metis and KCMR-gn, METIS must be installed using the instructions [here](src/tensorcsp). After building METIS as a shared library, set the environment variable `METIS_DLL` to point to `libmetis.so`, e.g. `export METIS_DLL=/usr/local/lib/libmetis.so`.
 * For line-Tamaki and factor-Tamaki, the tree-decomposition solver Tamaki must be compiled using the `heuristic` instructions [here](solvers/TCS-Meiji).
 * For line-Flow and factor-Flow, the tree-decomposition solver FlowCutter must be compiled using the instructions [here](solvers/flow-cutter-pace17).
 * For line-htd and factor-htd, the tree-decomposition solver htd must be compiled using the instructions [here](solvers/htd-master).
@@ -66,7 +66,7 @@ Moreover, the various tensor methods each require additional setup. Consult the 
 
 Once everything has been built, the primary script is located in `src/tensororder.py`. Example usage is
 ```
-python src/tensororder.py --method="line-Flow" < "benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf"
+python src/tensororder.py --planner="line-Flow" --weights="unweighted" < "benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf"
 ```
 
 TensorOrder requires the following python packages (see [requirements.txt](requirements.txt) for a working set of exact version information if needed):

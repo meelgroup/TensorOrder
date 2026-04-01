@@ -5,7 +5,7 @@ cachetools==4.0.0
 certifi==2019.11.28
 chardet==3.0.4
 Click==7.0
-cryptography==2.1.4
+cryptography==45.0.7
 Cython==0.29.15
 decorator==4.4.1
 gast==0.2.2
@@ -38,10 +38,8 @@ oauthlib==3.1.0
 opt-einsum==3.1.0
 protobuf==3.11.2
 pyasn1==0.4.8
-pyasn1-modules==0.2.8
-pycrypto==2.6.1
-pygobject==3.26.1
-python-apt==1.6.5+ubuntu0.2
+pyasn1-modules==0.3.0
+pycparser==2.21
 python-igraph==0.8.0
 pytz==2019.3
 pyxdg==0.25
