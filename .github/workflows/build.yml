@@ -1,0 +1,85 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # lint:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.11"
+  #         cache: "pip"
+  #     - run: pip install ruff
+  #     - run: ruff check src/
+
+
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y libdbus-1-dev libglib2.0-dev metis libmetis-dev
+
+      - name: Set METIS_DLL
+        run: echo "METIS_DLL=$(dpkg -L libmetis-dev | grep 'libmetis\.so$')" >> $GITHUB_ENV
+
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Compile FlowCutter
+        run: make -C solvers/flow-cutter-pace17
+
+      - name: Compile Cython extensions
+        run: cd src && python setup.py build_ext --inplace
+
+      - name: Smoke test (line-Flow + numpy)
+        run: python src/tensororder.py --planner="line-Flow" --tensor_library="numpy" --weights="unweighted" < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+      - name: Smoke test (KCMR-metis + numpy)
+        run: python src/tensororder.py --planner="KCMR-metis" --tensor_library="numpy" --weights="unweighted" < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+      - name: Smoke test (KCMR-gn + numpy)
+        run: python src/tensororder.py --planner="KCMR-gn" --tensor_library="numpy" --weights="unweighted" < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+      - name: Smoke test (line-Flow + tensorflow)
+        run: python src/tensororder.py --planner="line-Flow" --tensor_library="tensorflow" --weights="unweighted" < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+      - name: Smoke test (line-Flow + jax)
+        run: python src/tensororder.py --planner="line-Flow" --tensor_library="jax" --weights="unweighted" < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+  # docker-build:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+
+  #     - name: Build CPU Docker image
+  #       run: docker build --tag tensororder:ci -f Dockerfile .
+
+  #     - name: Smoke test inside container
+  #       run: |
+  #         docker run -i tensororder:ci python /src/tensororder.py \
+  #           --planner="line-Flow" --weights="unweighted" \
+  #           < benchmarks/cubic_vertex_cover/cubic_vc_50_0.cnf
+
+  # security:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-python@v5
+  #       with:
+  #         python-version: "3.11"
+  #     - run: pip install bandit
+  #     - run: bandit -r src/ --skip B101

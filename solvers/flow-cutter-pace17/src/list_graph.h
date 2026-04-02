@@ -2,8 +2,9 @@
 #define LIST_GRAPH_H
 
 #include "array_id_func.h"
-#include <string>
+
 #include <tuple>
+#include <string>
 
 struct ListGraph{
 	ListGraph()=default;

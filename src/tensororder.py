@@ -211,7 +211,7 @@ def run(
         tensor_library.add_argument("ensure_small", jax_ensure_small)
     if not jax_oneshot:
         tensor_library.add_argument("oneshot", jax_oneshot)
-    if jax_tensordot is not "tensordot":
+    if jax_tensordot != "tensordot":
         tensor_library.add_argument("tensordot", jax_tensordot)
     if tpu is not None and len(tpu) > 0:
         tensor_library.add_argument("TPU", tpu)
